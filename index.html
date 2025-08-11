@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Registration Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            width: 350px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 5px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Student Registration</h2>
+        <form id="registrationForm">
+            <label>Name:</label>
+            <input type="text" id="name">
+
+            <label>Email:</label>
+            <input type="text" id="email">
+
+            <label>Department:</label>
+            <select id="department">
+                <option value="">--Select Department--</option>
+                <option value="IT">IT</option>
+                <option value="CSE">CSE</option>
+                <option value="ECE">ECE</option>
+                <option value="EEE">EEE</option>
+                <option value="MECH">Mechanical</option>
+            </select>
+
+            <label>Year:</label>
+            <select id="year">
+                <option value="">--Select Year--</option>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+            </select>
+
+            <label>Project Title:</label>
+            <input type="text" id="project">
+
+            <button type="button" onclick="validateForm()">Register</button>
+        </form>
+    </div>
+
+    <script>
+        function validateForm() {
+            let name = document.getElementById("name").value.trim();
+            let email = document.getElementById("email").value.trim();
+            let department = document.getElementById("department").value;
+            let year = document.getElementById("year").value;
+            let project = document.getElementById("project").value.trim();
+
+            let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (name === "" || email === "" || department === "" || year === "" || project === "") {
+                alert("Please fill all fields.");
+                return;
+            }
+            if (!emailPattern.test(email)) {
+                alert("Please enter a valid email address.");
+                return;
+            }
+
+            alert("Registration Successful");
+            document.getElementById("registrationForm").reset();
+        }
+    </script>
+</body>
+</html>
