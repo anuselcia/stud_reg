@@ -3,32 +3,30 @@
 <head>
     <title>Student Registration Page</title>
     <style>
-        /* ---------- CSS Variables ---------- */
         :root {
             --primary-gradient: linear-gradient(135deg, #ff758c, #ff7eb3);
             --primary-color: #ff758c;
             --secondary-color: #ff7eb3;
             --bg-gradient: linear-gradient(to right, #ff9a9e, #fad0c4);
-            --text-color: #555; /* Gray text */
-            --label-color: #777; /* Lighter gray labels */
+            --text-color: #555;
+            --label-color: #777;
             --card-bg: rgba(255, 255, 255, 0.15);
             --border-color: rgba(255, 255, 255, 0.3);
             --input-bg: rgba(255, 255, 255, 0.9);
             --font-family: 'Segoe UI', sans-serif;
         }
 
-        /* ---------- Global Styles ---------- */
         body {
             font-family: var(--font-family);
             background: var(--bg-gradient);
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
         }
 
-        /* ---------- Form Container ---------- */
         .form-container {
             background: var(--card-bg);
             padding: 30px;
@@ -48,11 +46,9 @@
         h2 {
             text-align: center;
             margin-bottom: 25px;
-            letter-spacing: 1px;
             color: var(--text-color);
         }
 
-        /* ---------- Floating Labels ---------- */
         .input-group {
             position: relative;
             margin-bottom: 20px;
@@ -68,10 +64,8 @@
             color: var(--text-color);
             outline: none;
             transition: 0.3s ease;
-            appearance: none;
         }
 
-        /* Custom arrow for select */
         .input-group select {
             background-image: url('data:image/svg+xml;utf8,<svg fill="gray" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 20,0 10,10"/></svg>');
             background-repeat: no-repeat;
@@ -89,7 +83,6 @@
             transition: 0.3s ease;
         }
 
-        /* Floating label animation fix */
         .input-group input:focus + label,
         .input-group input:not(:placeholder-shown) + label,
         .input-group select:focus + label,
@@ -103,14 +96,12 @@
             border-radius: 5px;
         }
 
-        /* Focus effect */
         .input-group input:focus,
         .input-group select:focus {
             border-color: var(--secondary-color);
             box-shadow: 0 0 10px var(--secondary-color);
         }
 
-        /* ---------- Button ---------- */
         button {
             width: 100%;
             padding: 12px;
@@ -143,13 +134,78 @@
         button:hover {
             transform: translateY(-2px);
         }
+
+        /* ---------- Created Cards ---------- */
+        .cards-container {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .student-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            width: 260px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+            animation: fadeIn 0.5s ease-out;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .student-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .card-header {
+            background: var(--primary-gradient);
+            padding: 15px;
+            color: white;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .card-content {
+            padding: 15px;
+            color: var(--text-color);
+        }
+
+        .card-content p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+
+        .delete-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: darkred;
+        }
+
+        .card-wrapper {
+            position: relative;
+        }
     </style>
 </head>
 <body>
+
     <div class="form-container">
         <h2>Student Registration</h2>
         <form id="registrationForm">
-            
             <div class="input-group">
                 <input type="text" id="name" placeholder=" " required />
                 <label>Name</label>
@@ -188,15 +244,17 @@
                 <label>Project Title</label>
             </div>
 
-            <button type="button" onclick="validateForm()">Register</button>
+            <button type="button" onclick="registerAndCreateCard()">Register</button>
         </form>
     </div>
 
+    <div class="cards-container" id="cardsContainer"></div>
+
     <script>
-        function validateForm() {
+        function registerAndCreateCard() {
             let fields = [
                 { id: "name", msg: "Please enter your name" },
-                { id: "email", msg: "Please enter your email", pattern: /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/ },
+                { id: "email", msg: "Please enter your email", pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ },
                 { id: "department", msg: "Please select a department" },
                 { id: "year", msg: "Please select your year" },
                 { id: "project", msg: "Please enter your project title" }
@@ -215,6 +273,29 @@
             }
 
             alert("🎉 Registration Successful!");
+
+            let name = document.getElementById("name").value;
+            let email = document.getElementById("email").value;
+            let department = document.getElementById("department").value;
+            let year = document.getElementById("year").value;
+            let project = document.getElementById("project").value;
+
+            let card = document.createElement("div");
+            card.className = "student-card";
+            card.innerHTML = `
+                <div class="card-wrapper">
+                    <button class="delete-btn" onclick="this.parentElement.parentElement.remove()">X</button>
+                    <div class="card-header">${name}</div>
+                    <div class="card-content">
+                        <p><b>Email:</b> ${email}</p>
+                        <p><b>Department:</b> ${department}</p>
+                        <p><b>Year:</b> ${year}</p>
+                        <p><b>Project:</b> ${project}</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById("cardsContainer").prepend(card); // newest on top
             document.getElementById("registrationForm").reset();
         }
     </script>
